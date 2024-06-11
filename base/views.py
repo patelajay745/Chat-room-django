@@ -10,10 +10,7 @@ def home(request):
     return render(request,'base/home.html',context)
 
 def room(request,pk):
-    room=None
-    for i in Room.objects.all:
-        if i['id']==int(pk):
-            room=i
+    
 
-    context={'room':room}
+    context={'room':Room.objects.get(id=pk)}
     return render(request,'base/room.html',context)
