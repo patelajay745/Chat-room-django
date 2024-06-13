@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+
+{% block content%}
+
+<form action=""  method="POST">
+    {% csrf_token %}
+    <h1> Are you sure you want to delete {{room.name}}
+    <input type="hidden" value="{{room.id}}">    
+    <input type="submit" value="Yes">
+    <input type="button" value="No" onclick="window.location.href='{% url 'home' %}'">
+</form>
+
+    
+
+{% endblock content%}
