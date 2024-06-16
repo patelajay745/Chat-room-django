@@ -1,9 +1,20 @@
-{% extends "main.html" %}
-
-{% block content%}
-
+{% extends "main.html" %} {% block content%}
 
 <h1>{{room.name}}</h1>
-<h3>{{room.description}}
+<h3>
+    {{room.description}}
 
-{% endblock content%}
+    <div class="comment-wrapper">
+        <h3>Conversion</h3>
+        <hr />
+
+        {% for message in room_messages%}
+        <small>@{{message.user}} {{message.created | timesince }}</small>
+        <br />
+        <small>{{message.body}}</small>
+        <hr />
+        {% endfor %}
+    </div>
+
+    {% endblock content%}
+</h3>
