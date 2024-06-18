@@ -64,38 +64,48 @@ def registerUser(request):
 
 def home(request):
 
-    q = request.GET.get("q")
-    if q is not None:
-        room = Room.objects.filter(
-            Q(topic__name__icontains=q)
-            | Q(name__icontains=q)
-            | Q(host__username__icontains=q)
-            | Q(description__icontains=q)
-        )
-    else:
-        room = Room.objects.all()
+    q = request.GET.get("q") if request.GET.get("q") != None else ""
+
+    room = Room.objects.filter(
+        Q(topic__name__icontains=q)
+        | Q(name__icontains=q)
+        | Q(host__username__icontains=q)
+        | Q(description__icontains=q)
+    )
 
     room_count = room.count()  # faster then len method
     # roomcount=len(room)
 
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+
     pupularTopic = Topic.objects.annotate(room_count=Count("room")).order_by(
         "-room_count"
     )[:10]
-    context = {"rooms": room, "topics": pupularTopic, "room_count": room_count}
+    context = {
+        "rooms": room,
+        "topics": pupularTopic,
+        "room_count": room_count,
+        "room_messages": room_messages,
+    }
     return render(request, "base/home.html", context)
 
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all().order_by("-created")
-
+    participants = room.participants.all()
     if request.method == "POST":
         comment = Message.objects.create(
             user=request.user, room=room, body=request.POST.get("body")
         )
+        room.participants.add(request.user)
         return redirect("room", pk=room.id)
 
-    context = {"room": room, "room_messages": room_messages}
+    context = {
+        "room": room,
+        "room_messages": room_messages,
+        "participants": participants,
+    }
     return render(request, "base/room.html", context)
 
 
@@ -138,5 +148,15 @@ def deleteRoom(request, pk):
     if request.method == "POST":
         room.delete()
         return redirect("home")
-    context = {"room": room}
-    return render(request, "base/delete_room.html", context)
+    context = {"obj": room}
+    return render(request, "base/delete.html", context)
+
+
+@login_required(login_url="login")
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+    if request.method == "POST":
+        message.delete()
+        return redirect("home")
+    context = {"obj": message}
+    return render(request, "base/delete.html", context)
