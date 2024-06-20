@@ -113,11 +113,13 @@ def userProfile(request, pk):
 
     profile = User.objects.get(id=pk)
     rooms = profile.room_set.all()
+    room_count = rooms.count()
     room_messages = profile.message_set.all()
     topics = Topic.objects.all()
     context = {
         "user": profile,
         "rooms": rooms,
+        "room_count": room_count,
         "topics": topics,
         "room_messages": room_messages,
     }
