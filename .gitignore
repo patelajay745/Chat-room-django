@@ -1,2 +1,4 @@
 env/
 base/__pycache__/
+studybud/.env
+studybud/__pycache__/
