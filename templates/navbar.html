@@ -37,9 +37,9 @@
       <div class="header__user">
         <a href="{% url 'user-profile' request.user.id %}">
           <div class="avatar avatar--medium active">
-            <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+            <img src="{{ request.user.avtar.url }}" />
           </div>
-          <p>John Doe <span>@{{user.username}}</span></p>
+          <p>{{user.name}} <span>@{{user.username}}</span></p>
         </a>
         <button class="dropdown-button">
           <svg

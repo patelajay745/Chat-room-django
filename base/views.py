@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import RoomForm, UserForm
+from .forms import *
 from django.db.models import Count
 from django.db.models import Q
-from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -20,14 +18,14 @@ def loginPage(request):
     if request.user.is_authenticated:
         return redirect("home")
     if request.method == "POST":
-        username = request.POST.get("username").lower()
+        email = request.POST.get("email").lower()
         password = request.POST.get("password")
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
             messages.error(request, "user does not exists")
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             return redirect("home")
@@ -44,9 +42,9 @@ def logoutUser(request):
 
 
 def registerUser(request):
-    form = UserCreationForm()
+    form = MyUserCreationForm()
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -195,7 +193,7 @@ def updateUser(request):
 
     if request.method == "POST":
         print("sdffsssssss")
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             print("Everythin is saved")
