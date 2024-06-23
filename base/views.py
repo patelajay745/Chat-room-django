@@ -77,7 +77,7 @@ def home(request):
 
     pupularTopic = Topic.objects.annotate(room_count=Count("room")).order_by(
         "-room_count"
-    )[:10]
+    )[:5]
     context = {
         "rooms": room,
         "topics": pupularTopic,
@@ -130,12 +130,15 @@ def createRoom(request):
     if request.method == "POST":
         topic_name = request.POST.get("topic")
         topic, created = Topic.objects.get_or_create(name=topic_name)
-        Room.objects.create(
+        room = Room.objects.create(
             host=request.user,
             topic=topic,
             name=request.POST.get("name"),
             description=request.POST.get("description"),
         )
+
+        room.participants.add(request.user)
+
         return redirect("home")
 
     context = {"form": form, "topics": topics}

@@ -414,6 +414,19 @@ a {
 }
 
 .layout--3 > .container > div:first-child {
+  flex-basis: 50%; /* First column is 50% of the container width */
+  max-width: none; /* Remove any max-width constraints if present */
+}
+
+.layout--3 > .container > div:nth-child(2) {
+  flex-basis: 25%; /* Second column is 25% of the container width */
+}
+
+.layout--3 > .container > div:last-child {
+  flex-basis: 25%; /* Last column is 25% of the container width */
+}
+
+/* .layout--3 > .container > div:first-child {
   flex-basis: 18%;
   max-width: 22.5rem;
 }
@@ -424,7 +437,7 @@ a {
 
 .layout--3 > .container > div:last-child {
   flex-basis: 25%;
-}
+} */
 
 .layout--2 > .container > div:first-child {
   flex-basis: 72%;
@@ -580,7 +593,7 @@ a {
   color: var(--color-dark-light);
 }
 
-.topics__list {
+/* .topics__list {
   list-style: none;
 }
 
@@ -591,6 +604,46 @@ a {
   font-weight: 500;
   color: var(--color-light-gray);
   transition: all 0.3s ease-in-out;
+}
+
+.topics__list li a.active,
+.topics__list li a:hover {
+  color: var(--color-main);
+}
+
+.topics__list li a span {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-dark);
+  border-radius: 3px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+} */
+.topics__list {
+  display: flex; /* Arrange children side by side */
+  flex-wrap: wrap; /* Allow wrapping to the next line if necessary */
+  gap: 1rem; /* Add some space between items */
+  list-style: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.topics__list li {
+  margin-bottom: 0; /* Remove bottom margin since items are now side by side */
+}
+
+.topics__list li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Align items vertically centered */
+  padding: 0.5rem 1rem; /* Add padding for better appearance */
+  font-weight: 500;
+  color: var(--color-light-gray);
+  transition: all 0.3s ease-in-out;
+  background-color: var(
+    --color-dark
+  ); /* Optional: Add background for visibility */
+  border-radius: 3px; /* Optional: Add border radius for rounded corners */
 }
 
 .topics__list li a.active,
