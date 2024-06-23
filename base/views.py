@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import RoomForm, RegisterForm
+from .forms import RoomForm, UserForm
 from django.db.models import Count
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -35,7 +35,7 @@ def loginPage(request):
             messages.error(request, "User or Password does not exists")
 
     context = {"page": page}
-    return render(request, "base/login.html", context)
+    return render(request, "base/login_register.html", context)
 
 
 def logoutUser(request):
@@ -44,9 +44,7 @@ def logoutUser(request):
 
 
 def registerUser(request):
-    form = RegisterForm()
-    context = {"form": form}
-
+    form = UserCreationForm()
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -59,6 +57,7 @@ def registerUser(request):
         else:
             messages.error(request, form.errors)
 
+    context = {"form": form}
     return render(request, "base/login_register.html", context)
 
 
@@ -192,11 +191,11 @@ def deleteMessage(request, pk):
 @login_required(login_url="login")
 def updateUser(request):
     user = request.user
-    form = RegisterForm(instance=user)
+    form = UserForm(instance=user)
 
     if request.method == "POST":
         print("sdffsssssss")
-        form = RegisterForm(request.POST, instance=user)
+        form = UserForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             print("Everythin is saved")

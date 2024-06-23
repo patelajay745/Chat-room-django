@@ -15,7 +15,7 @@ class RoomForm(ModelForm):
         fields = "__all__"
 
 
-class RegisterForm(ModelForm):
+class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("username", "email", "first_name", "last_name")
