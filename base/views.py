@@ -187,3 +187,22 @@ def deleteMessage(request, pk):
         return redirect("home")
     context = {"obj": message}
     return render(request, "base/delete.html", context)
+
+
+@login_required(login_url="login")
+def updateUser(request):
+    user = request.user
+    form = RegisterForm(instance=user)
+
+    if request.method == "POST":
+        print("sdffsssssss")
+        form = RegisterForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            print("Everythin is saved")
+            return redirect("user-profile", pk=user.id)
+        else:
+            print(form.errors)
+
+    context = {"form": form}
+    return render(request, "base/update-user.html", context)
