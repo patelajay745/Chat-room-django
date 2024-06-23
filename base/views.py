@@ -205,3 +205,16 @@ def updateUser(request):
 
     context = {"form": form}
     return render(request, "base/update-user.html", context)
+
+
+def topicsPage(request):
+    q = request.GET.get("q") if request.GET.get("q") is not None else ""
+
+    if q:
+        topics = Topic.objects.filter(name__icontains=q)
+    else:
+        topics = Topic.objects.order_by("?")[:5]
+
+    context = {"topics": topics}
+
+    return render(request, "base/topics.html", context)
