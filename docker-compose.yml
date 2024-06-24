@@ -16,12 +16,7 @@ services:
   studyroom:
     build: .
     container_name: my-studyroom-c1
-    environment:
-      DB_NAME: "studyroom"
-      DB_USER: "postgres"
-      DB_USER_PASSWORD: "0745"
-      DB_HOST: "postgres"
-      DB_PORT: "5432"
+    env_file: ".env"
     ports:
       - "8000:8000"
     command: >
