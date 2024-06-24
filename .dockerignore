@@ -1,0 +1,20 @@
+# Ignore Python bytecode files
+base/__pycache__
+env
+studybud/__pycache__
+
+# Ignore Django migrations
+**/migrations
+
+# Ignore database files
+*.sqlite3
+
+# Ignore environment variables
+*.env
+
+# Ignore log files
+*.log
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml

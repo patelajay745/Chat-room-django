@@ -659,8 +659,22 @@ a {
   font-weight: 700;
   letter-spacing: 1px;
 }
-
 .topics-page a:hover {
+  text-decoration: underline;
+}
+
+.topics-page .topics__list li a {
+  margin: 2rem 0;
+  padding-bottom: 1rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-dark-medium);
+}
+
+.topics-page .header__search {
+  display: block;
+}
+
+/* .topics-page a:hover {
   text-decoration: underline;
 }
 
@@ -673,7 +687,7 @@ a {
 
 .topics-page .header__search {
   display: block;
-}
+} */
 
 @media screen and (max-width: 500px) {
   .mobile-menu .header__search {

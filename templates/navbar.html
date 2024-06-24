@@ -3,7 +3,7 @@
 <header class="header header--loggedIn">
   <div class="container">
     <a href="{% url 'home'%}" class="header__logo">
-      <img src="{% static 'images/logo.svg' %}" />
+      <img src="{% static 'images/logo.png' %}" />
       <h1>StudyRoom</h1>
     </a>
     <form class="header__search" action={% url 'home'%} method="GET">
@@ -24,13 +24,7 @@
       </label>
     </form>
     <nav class="header__menu">
-      <!-- Not Logged In -->
-      <!-- <a href="/login.html">
-            <img src="./assets/avatar.svg" />
-            <p>Login</p>
-          </a> -->
-
-      <!-- Logged In -->
+      
 
       {% if request.user.is_authenticated %} 
 
