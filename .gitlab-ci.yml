@@ -4,7 +4,7 @@ variables:
 stages:
   - code-analysis
 
-code-analysis:
+sonar-scan:
   stage: code-analysis
   image:
     name: sonarsource/sonar-scanner-cli:latest
@@ -15,3 +15,19 @@ code-analysis:
       - .sonar/cache
   script:
     - sonar-scanner
+
+owasp_dependency_check:
+  image:
+    name: registry.gitlab.com/gitlab-ci-utils/docker-dependency-check:latest
+    entrypoint: [""]
+  stage: code-analysis
+  script:
+    - >
+      /usr/share/dependency-check/bin/dependency-check.sh --scan "./" --format ALL
+      --project "$CI_PROJECT_NAME" --failOnCVSS 0
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - "./dependency-check-report.html"
+      - "./dependency-check-report.json"
