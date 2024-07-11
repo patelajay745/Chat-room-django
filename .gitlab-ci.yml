@@ -47,6 +47,9 @@ build:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
     - echo "$TARGET_URL"
+  artifacts:
+    paths:
+      - $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/$GOOGLE_REPO_NAME/main:$CI_COMMIT_SHORT_SHA
 
 include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
