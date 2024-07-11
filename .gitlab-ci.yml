@@ -46,6 +46,7 @@ build:
   script:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
+    - docker push $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/$GOOGLE_REPO_NAME/main:$CI_COMMIT_SHORT_SHA
     - echo "$TARGET_URL"
 
 include:
