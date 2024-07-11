@@ -39,7 +39,8 @@ docker_build:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
     entrypoint: [""]
   script:
+    - echo "$CI_REGISTRY_IMAGE"
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-      --destination "gcr.io/${GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID}/${GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME}/${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+      --destination "gcr.io/${GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID}/${GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME}/${GITLAB_IMAGE}:${CI_COMMIT_TAG}"
