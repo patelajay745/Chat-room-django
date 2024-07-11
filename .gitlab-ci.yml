@@ -1,7 +1,7 @@
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
-  TARGET_URL: $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/$GOOGLE_REPO_NAME/main:${CI_COMMIT_SHORT_SHA}"
+  TARGET_URL: $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/$GOOGLE_REPO_NAME/main:${CI_COMMIT_SHORT_SHA}
 
 stages:
   - code-analysis
@@ -53,7 +53,7 @@ include:
     inputs:
       stage: push
       source: $GITLAB_IMAGE
-      target: $TARGET_URL
+      target: $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/$GOOGLE_REPO_NAME/main:${CI_COMMIT_SHORT_SHA}
 # docker_build:
 #   stage: build
 #   image:
