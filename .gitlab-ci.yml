@@ -1,7 +1,7 @@
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
-  TARGET_URL: $GOOGLE_ARTIFICAT_REGISTRY_REPOSITORY_LOCATION-docker.pkg.dev/${GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID}/${GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME}/main:${CI_COMMIT_SHORT_SHA}"
+  TARGET_URL: $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/GOOGLE_REPO_NAME/main:${CI_COMMIT_SHORT_SHA}"
 
 stages:
   - code-analysis
@@ -46,7 +46,7 @@ build:
   script:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
-    - echo "$GOOGLE_ARTIFICT_REGISTRY_REPOSITORY_LOCATION"
+    - echo "$TARGET_URL"
 
 include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
