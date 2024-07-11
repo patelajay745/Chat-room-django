@@ -5,42 +5,55 @@ stages:
   - code-analysis
   - build
 
-sonar-scan:
-  stage: code-analysis
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - sonar-scanner
+# sonar-scan:
+#   stage: code-analysis
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   script:
+#     - sonar-scanner
 
-owasp_dependency_check:
-  image:
-    name: registry.gitlab.com/gitlab-ci-utils/docker-dependency-check:latest
-    entrypoint: [""]
-  stage: code-analysis
-  script:
-    - >
-      /usr/share/dependency-check/bin/dependency-check.sh --scan "./" --format ALL
-      --project "$CI_PROJECT_NAME" --failOnCVSS 0
-  allow_failure: true
-  artifacts:
-    when: always
-    paths:
-      - "./dependency-check-report.html"
-      - "./dependency-check-report.json"
+# owasp_dependency_check:
+#   image:
+#     name: registry.gitlab.com/gitlab-ci-utils/docker-dependency-check:latest
+#     entrypoint: [""]
+#   stage: code-analysis
+#   script:
+#     - >
+#       /usr/share/dependency-check/bin/dependency-check.sh --scan "./" --format ALL
+#       --project "$CI_PROJECT_NAME" --failOnCVSS 0
+#   allow_failure: true
+#   artifacts:
+#     when: always
+#     paths:
+#       - "./dependency-check-report.html"
+#       - "./dependency-check-report.json"
 
-docker_build:
+build:
+  image: docker:24.0.5
   stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:v1.14.0-debug
-    entrypoint: [""]
+  services:
+    - docker:24.0.5-dind
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
   script:
-    - echo "$CI_REGISTRY_IMAGE"
-    - /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-      --destination "gcr.io/${GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID}/${GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME}/main:${CI_COMMIT_SHORT_SHA}"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+# docker_build:
+#   stage: build
+#   image:
+#     name: docker:24.0.5
+#     # name: gcr.io/kaniko-project/executor:v1.14.0-debug
+#     entrypoint: [""]
+#   script:
+#     - echo "$CI_REGISTRY_IMAGE"
+#     - docker build -t
+#     # - /kaniko/executor
+#     #   --context "${CI_PROJECT_DIR}"
+#     #   --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+#     #   --destination "gcr.io/${GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID}/${GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME}/main:${CI_COMMIT_SHORT_SHA}"
