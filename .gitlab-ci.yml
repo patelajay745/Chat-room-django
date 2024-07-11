@@ -46,7 +46,7 @@ build:
   script:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
-    - echo "$GOOGLE_ARTIFICAT_REGISTRY_REPOSITORY_LOCATION"
+    - echo "$GOOGLE_ARTIFICT_REGISTRY_REPOSITORY_LOCATION"
 
 include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
