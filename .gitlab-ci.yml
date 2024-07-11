@@ -48,7 +48,7 @@ build:
     - docker push $IMAGE_TAG
 
 include:
-  - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@0.1.0
+  - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
     inputs:
       stage: push
       source: $GITLAB_IMAGE
