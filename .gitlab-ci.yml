@@ -1,13 +1,13 @@
 variables:
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
-  AR_IMAGE: $GOOGLE_REPO_LOCATION-docker.pkg.dev/$GOOGLE_PROJECT_ID/$GOOGLE_REPO_NAME/main:$CI_COMMIT_SHORT_SHA
+  AR_IMAGE: $GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_LOCATION-docker.pkg.dev/$GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID/$GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
 
 stages:
   - code-analysis
   - build
   - push
-
+  - image-scan
 # sonar-scan:
 #   stage: code-analysis
 #   image:
@@ -51,8 +51,19 @@ include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
     inputs:
       stage: push
-      source: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
-      target: $GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_LOCATION-docker.pkg.dev/$GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID/$GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
+      source: $IMAGE_TAG
+      target: $AR_IMAGE
+
+trivy_scan:
+  image: docker:stable
+  stage: image-scan
+  script:
+    - ./trivy --exit-code 0 --cache-dir .trivycache/ --no-progress --format template --template "@contrib/gitlab.tpl" -o gl-container-scanning-report.json $IMAGE_TAG
+    - ./trivy --exit-code 0 --cache-dir .trivycache/ --no-progress --severity HIGH $IMAGE_TAG
+    - ./trivy --exit-code 1 --cache-dir .trivycache/ --severity CRITICAL --no-progress $IMAGE_TAG
+  artifacts:
+    reports:
+      container_scanning: gl-container-scanning-report.json
 
 
 # docker_build:
