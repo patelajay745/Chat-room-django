@@ -58,7 +58,7 @@ trivy_scan:
   image: aquasec/trivy
   stage: image-scan
   script:
-    - image $IMAGE_TAG
+    - trivy image $IMAGE_TAG
   # artifacts:
   #   reports:
   #     container_scanning: gl-container-scanning-report.json
