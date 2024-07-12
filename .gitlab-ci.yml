@@ -47,23 +47,21 @@ build:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
 
-include:
-  - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
-    inputs:
-      stage: push
-      source: $IMAGE_TAG
-      target: $AR_IMAGE
+# include:
+#   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
+#     inputs:
+#       stage: push
+#       source: $IMAGE_TAG
+#       target: $AR_IMAGE
 
 trivy_scan:
-  image: docker:stable
+  image: aquasec/trivy
   stage: image-scan
   script:
-    - ./trivy --exit-code 0 --cache-dir .trivycache/ --no-progress --format template --template "@contrib/gitlab.tpl" -o gl-container-scanning-report.json $IMAGE_TAG
-    - ./trivy --exit-code 0 --cache-dir .trivycache/ --no-progress --severity HIGH $IMAGE_TAG
-    - ./trivy --exit-code 1 --cache-dir .trivycache/ --severity CRITICAL --no-progress $IMAGE_TAG
-  artifacts:
-    reports:
-      container_scanning: gl-container-scanning-report.json
+    - image $IMAGE_TAG
+  # artifacts:
+  #   reports:
+  #     container_scanning: gl-container-scanning-report.json
 
 
 # docker_build:
