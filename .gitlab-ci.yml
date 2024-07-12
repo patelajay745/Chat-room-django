@@ -60,7 +60,11 @@ trivy_scan:
     entrypoint: [""]
   stage: image-scan
   script:
-    - trivy image $IMAGE_TAG
+    - trivy image $IMAGE_TAG --output "$CI_PROJECT_DIR/gl-container-scanning-report.json"
+  artifacts:
+    when:                          always
+    reports:
+      container_scanning:          gl-container-scanning-report.json
   # artifacts:
   #   reports:
   #     container_scanning: gl-container-scanning-report.json
