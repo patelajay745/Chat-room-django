@@ -84,7 +84,7 @@ update_manifest:
     - git clone git@gitlab.com:learning1482041/studyroom-manifest.git  
     - ls studyroom-manifest
   script:
-    - sed -i "s/$CI_REGISTRY_IMAGE:.*/$CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}/g" deploy.yaml
+    - sed -i "s/$CI_REGISTRY_IMAGE:.*/$CI_REGISTRY_IMAGE:${CI_COMMIT_SHORT_SHA}/g" studyroom-manifest/deploy.yaml
     - git add .
     - git commit -am "Update Image"
     - git push
