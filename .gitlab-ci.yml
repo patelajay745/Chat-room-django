@@ -55,7 +55,9 @@ build:
 #       target: $AR_IMAGE
 
 trivy_scan:
-  image: aquasec/trivy
+  image: 
+    name: aquasec/trivy
+    entrypoint: [""]
   stage: image-scan
   script:
     - trivy image $IMAGE_TAG
