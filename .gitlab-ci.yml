@@ -51,8 +51,10 @@ include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
     inputs:
       stage: push
-      source: $GITLAB_IMAGE
-      target: $AR_IMAGE
+      source: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+      target: $GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_LOCATION-docker.pkg.dev/$GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID/$GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
+
+
 # docker_build:
 #   stage: build
 #   image:
