@@ -71,18 +71,19 @@ update_manifest:
   stage: update-manifest
   image: ubuntu:22.04
   before_script:
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y'
-  - mkdir -p /root/.ssh
-  - echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
-  - chmod 600 /root/.ssh/id_rsa
-  - ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
-  - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-  - git config --global user.email "gitlab-ci@gmail.com"
-  - git config --global user.name "gitlab-ci"
-  - git clone git@gitlab.com:learning1482041/studyroom-manifest.git
-  - ls studyroom-manifest
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y)'
+    - mkdir -p /root/.ssh
+    - echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
+    - chmod 600 /root/.ssh/id_rsa
+    - ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - git config --global user.email "gitlab-ci@gmail.com"
+    - git config --global user.name "gitlab-ci"
+    - git clone git@gitlab.com:learning1482041/studyroom-manifest.git  
+  script:
+    - ls studyroom-manifest
 
 
 # docker_build:
