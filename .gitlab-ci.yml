@@ -70,7 +70,7 @@ build:
 update_manifest:
   stage: update-manifest
   image: ubuntu:22.04
-before_script:
+  before_script:
   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y'
   - mkdir -p /root/.ssh
   - echo "$SSH_PRIVATE_KEY" > /root/.ssh/id_rsa
