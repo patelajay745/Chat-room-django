@@ -84,6 +84,9 @@ update_manifest:
     - git clone git@gitlab.com:learning1482041/studyroom-manifest.git  
     - ls studyroom-manifest
   script:
+    - pwd
+    - cd studyroom-manifest
+    - pwd
     - sed -i "s/${CI_PROJECT_NAME}:.*/${CI_PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}/g" studyroom-manifest/deploy.yaml
     - git add .
     - git commit -am "Update Image"
