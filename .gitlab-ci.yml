@@ -8,6 +8,7 @@ stages:
   - build-and-push
   - image-vulnerability-scan
   - update-deployment-manifest
+  
 sonar-analysis:
   stage: static-analysis
   image:
