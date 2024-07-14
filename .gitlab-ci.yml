@@ -4,13 +4,14 @@ variables:
   AR_IMAGE: $GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_LOCATION-docker.pkg.dev/$GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID/$GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
 
 stages:
-  - static-analysis
-  - build-and-push
+  - code-analysis
+  - build-image
+  - upload-image-artifact
   - image-vulnerability-scan
   - update-deployment-manifest
   
 sonar-analysis:
-  stage: static-analysis
+  stage: code-analysis
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -25,7 +26,7 @@ owasp_dependency_check:
   image:
     name: registry.gitlab.com/gitlab-ci-utils/docker-dependency-check:latest
     entrypoint: [""]
-  stage: static-analysis
+  stage: code-analysis
   script:
     - >
       /usr/share/dependency-check/bin/dependency-check.sh --scan "./" --format ALL
@@ -38,7 +39,7 @@ owasp_dependency_check:
       - "./dependency-check-report.json"
 
 build-and-push-image:
-  stage: build-and-push
+  stage: build-image
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
@@ -47,11 +48,12 @@ build-and-push-image:
   script:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
+    
 
 include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
     inputs:
-      stage: build-and-push
+      stage: upload-image-artifact
       source: $IMAGE_TAG
       target: $AR_IMAGE
 
