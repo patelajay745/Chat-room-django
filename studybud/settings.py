@@ -122,7 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/images/"
@@ -142,7 +142,7 @@ if USE_S3:
             "BACKEND": "storages.backends.s3.S3Storage",
         },
         "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
     }
 
