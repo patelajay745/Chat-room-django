@@ -5,3 +5,4 @@ studybud/__pycache__/
 .env
 studybud/settings/dev.py
 .DS_Store
+static/.DS_Store

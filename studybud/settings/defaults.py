@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv()
 
 # Quick-start development settings - unsuitable for production
@@ -132,6 +133,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 USE_S3 = "TRUE"
 
+
 if USE_S3:
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
@@ -143,6 +145,8 @@ if USE_S3:
     # s3 static settings
     AWS_LOCATION = "static"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3.S3Storage",
@@ -164,6 +168,7 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
