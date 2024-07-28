@@ -130,7 +130,7 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-USE_S3 = os.getenv("USE_S3") == "TRUE"
+USE_S3 = "TRUE"
 
 if USE_S3:
     AWS_QUERYSTRING_AUTH = False
