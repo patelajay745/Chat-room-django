@@ -122,12 +122,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
 
-if os.getenv("STATIC_ROOT"):
-    STATIC_ROOT = os.getenv("STATIC_ROOT")
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# if os.getenv("STATIC_ROOT"):
+#     STATIC_ROOT = os.getenv("STATIC_ROOT")
+# else:
+#     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # STATICFILES_DIRS = [BASE_DIR / "static"]
 
@@ -143,11 +142,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 USE_S3 = os.getenv("USE_S3") == "TRUE"
 
+STATIC_URL = "static/"
+
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
 if USE_S3:
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3.S3Storage",
         },
+        
     }
 
     AWS_QUERYSTRING_AUTH = False
