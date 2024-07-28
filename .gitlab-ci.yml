@@ -90,6 +90,7 @@ update-deployment-manifest:
     - git add .
     - git commit -am "Update Image"
     - git push origin main
+    
 # docker_build:
 #   stage: build
 #   image:
