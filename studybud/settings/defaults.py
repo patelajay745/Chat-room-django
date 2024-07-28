@@ -147,14 +147,14 @@ if USE_S3:
         "default": {
             "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "bucket_name": "django-studyroom",
                 "location": "media",
             },
         },
         "staticfiles": {
             "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "bucket_name": "django-studyroom",
                 "location": "static",
             },
         },
