@@ -100,3 +100,4 @@ update-deployment-manifest:
     - git add .
     - git commit -am "Update Image"
     - git push origin main
+#   - ssh -T git@gitlab.com
