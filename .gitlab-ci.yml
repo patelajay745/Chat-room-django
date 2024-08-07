@@ -12,6 +12,8 @@ stages:
 
 sonar-analysis:
   stage: code-analysis
+  only:
+    - feature
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -27,6 +29,8 @@ owasp_dependency_check:
     name: registry.gitlab.com/gitlab-ci-utils/docker-dependency-check:latest
     entrypoint: [""]
   stage: code-analysis
+  only:
+    - feature
   script:
     - >
       /usr/share/dependency-check/bin/dependency-check.sh --scan "./" --format ALL
@@ -38,9 +42,11 @@ owasp_dependency_check:
       - "./dependency-check-report.html"
       - "./dependency-check-report.json"
 
-build-and-push-image:
+build-image:
   stage: build-image
   image: docker:24.0.5
+  only:
+    - feature
   services:
     - docker:24.0.5-dind
   before_script:
@@ -53,11 +59,15 @@ include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
     inputs:
       stage: upload-image-artifact
+      only:
+        - feature
       source: $IMAGE_TAG
       target: $AR_IMAGE
 
 image-vulnerability-scan:
   stage: image-vulnerability-scan
+  only:
+    - feature
   image:
     name: aquasec/trivy
     entrypoint: [""]
@@ -71,6 +81,8 @@ image-vulnerability-scan:
 update-deployment-manifest:
   stage: update-deployment-manifest
   image: ubuntu:22.04
+  only:
+    - feature
   before_script:
     - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y)"
     - mkdir -p /root/.ssh
@@ -90,17 +102,3 @@ update-deployment-manifest:
     - git add .
     - git commit -am "Update Image"
     - git push origin main
-    
-# docker_build:
-#   stage: build
-#   image:
-#     name: docker:24.0.5
-#     # name: gcr.io/kaniko-project/executor:v1.14.0-debug
-#     entrypoint: [""]
-#   script:
-#     - echo "$CI_REGISTRY_IMAGE"
-#     - docker build -t
-#     # - /kaniko/executor
-#     #   --context "${CI_PROJECT_DIR}"
-#     #   --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-#     #   --destination "gcr.io/${GOOGLE_ARTIFACT_REGISTRY_PROJECT_ID}/${GOOGLE_ARTIFACT_REGISTRY_REPOSITORY_NAME}/main:${CI_COMMIT_SHORT_SHA}"
