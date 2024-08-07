@@ -59,8 +59,6 @@ include:
   - component: gitlab.com/google-gitlab-components/artifact-registry/upload-artifact-registry@main
     inputs:
       stage: upload-image-artifact
-      only:
-        - feature
       source: $IMAGE_TAG
       target: $AR_IMAGE
 
